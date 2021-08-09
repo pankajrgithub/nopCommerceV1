@@ -1,0 +1,30 @@
+package Predicate;
+
+import java.util.function.Predicate;
+class Employee
+{
+	public String name;
+	public int Salary;
+	public int Exprience;
+
+Employee(String ename,int Sal,int Exp)
+{
+	name=ename;
+	Salary=Sal;
+	Exprience=Exp;
+}
+
+}
+
+public class Demo4 
+{
+
+	public static void main(String... args)
+	{
+		Employee emp=new Employee("Ram",80000,4);
+		
+		Predicate<Employee> pe= e->(e.Salary>30000);
+		
+		System.out.println(pe.test(emp));
+	}
+}

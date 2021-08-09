@@ -1,0 +1,30 @@
+package Demo;
+
+
+interface CabRide
+{
+	public String Ride(String source,String des);
+	
+}
+
+class Ola implements CabRide
+{
+	public String Ride(String source, String des)
+	{
+		System.out.println("cab book" +source + "to" +des);
+		return des;
+	
+	}
+}
+
+
+public class DemoLambda {
+
+	public static void main(String[] args) 
+	{
+		CabRide CR=new Ola();
+				
+        CR.Ride("Hyd", "Chennai");
+	}
+
+}

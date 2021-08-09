@@ -1,0 +1,151 @@
+buildscript {
+    repositories {
+        maven {
+        	def contextUrl = System.getenv("ArtifactoryURL")?:"${artifactory_contextUrl}"
+        	def repoUserName = System.getenv("ArtifactoryUser") ?:"${artifactory_user}"
+			def repoPasswd = System.getenv("ArtifactoryPassword")?:"${artifactory_password}"
+            url "${contextUrl}/jcenter"
+            credentials {
+                username = "${repoUserName}"
+                password = "${repoPasswd}"
+            }
+            name = "maven-main-cache"
+        }
+    }
+    
+    dependencies {
+		classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.1"
+		classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
+		
+	}
+}
+
+
+Properties versionprops = new Properties()
+versionprops.load(new FileInputStream("${rootProject.projectDir}" + "/version.prop"))
+ext.versionProps = versionprops
+def maintenance = (project.hasProperty('maintenance_version') ? "${maintenance_version}" : ext.versionProps['maintenance']) + "${tag}"
+def v = ext.versionProps['major'] + "." + ext.versionProps['minor'] + "." + ext.versionProps['security'] + "." + maintenance
+
+
+allprojects {
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'jacoco'
+apply plugin: "org.sonarqube"
+apply plugin: 'project-report'
+
+version =v
+
+jacoco {
+    toolVersion = "0.8.2"
+   
+}
+
+sourceCompatibility = 11.0
+targetCompatibility = 11.0
+
+def artifactoryContextUrl = System.getenv("ArtifactoryURL")?:"${artifactory_contextUrl}"
+def repoKeyDevContext = System.getenv("repoKeyDev") ?:"${artifactory_repo_key}"
+def repoKeyToolContext = System.getenv("repoKeyDev") ?:"${artifactory_tools_repo_key}"
+def repoUserName = System.getenv("ArtifactoryUser") ?:"${artifactory_user}"
+def repoPasswd = System.getenv("ArtifactoryPassword")?:"${artifactory_password}"
+ 
+ repositories {
+		mavenLocal()
+	    jcenter()
+		mavenCentral()
+        maven { url "${artifactoryContextUrl}/jcenter" 
+        	credentials {
+                username = "${repoUserName}"
+                password = "${repoPasswd}"
+            }
+        }
+		maven { url "${artifactoryContextUrl}/${repoKeyDevContext}" 
+			credentials {
+                username = "${repoUserName}"
+                password = "${repoPasswd}"
+            }
+		}
+		maven { url "${artifactoryContextUrl}/${repoKeyToolContext}" 
+			credentials {
+                username = "${repoUserName}"
+                password = "${repoPasswd}"
+            }
+		}
+ artifactory {
+			contextUrl = "${artifactoryContextUrl}"
+			publish {
+				repository {
+					repoKey = "${repoKeyDevContext}"
+					username = "${repoUserName}"
+					password = "${repoPasswd}"
+				}
+			defaults { publications ('mavenJava') }
+			}
+   }
+		
+}
+ 
+ 
+
+  sonarqube {
+        properties {
+        	property "sonar.projectName", "Reno Switch Product"
+        	property "sonar.projectKey", "reno-switch-product"
+        	property "sonar.host.url", "http://172.16.23.36:9000"
+        	property "sonar.login", "e61d052edd84c9f13e9d8416822b323aeb941f73"
+
+            property "sonar.sources", "src/main"
+            //property "sonar.tests", "src/test"
+            property "sonar.sourceEncoding", "UTF-8"
+            property "sonar.projectDescription", "Reno Switch Product (RSP)"
+       }
+   }
+   
+ dependencies {
+   
+   compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.2'
+   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.2'
+   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.2' 
+   
+   testCompile group: 'junit', name: 'junit', version: '4.11'
+   testCompile group: 'org.springframework', name: 'spring-test', version: '5.2.6.RELEASE'
+   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
+   testCompile group: 'org.mockito', name: 'mockito-core', version: '3.3.3'
+   compile group: 'reno.jpos', name: 'jpos', version: '2.1.4'
+   }
+   
+ task allRuntimeDep(type: DependencyReportTask) {
+        doFirst{
+            try {
+                configurations = [project.configurations.runtime] as Set
+                 
+            } catch(UnknownConfigurationException) {
+            }
+        }
+   }
+  
+  
+task('readAll'){
+    doLast{
+      def pattern = ~/(?m)^[+][-][-][-]/
+      def file = new File("${rootProject.projectDir}",'dep.txt')
+       def f = new File("${rootProject.projectDir}",'dependency.txt')
+       def s =""
+         file.eachLine { String line ->
+           def matcher = line =~ pattern
+          if(matcher){
+          if(!s.contains(line)) {
+            s=s+line+"\n";
+            }
+             
+         }
+        f.write(s)
+      }
+    }
+  }
+
+}

@@ -1,0 +1,40 @@
+package Demo;
+
+@FunctionalInterface
+interface CabRide
+{
+	public String Ride(String source,String des);
+	
+}
+
+/*class Ola implements CabRide
+{
+	public String Ride(String source, String des)
+	{
+		System.out.println("cab book" +" "+source + " " +des);
+		return des;
+	
+	(String source, String des)->
+	{
+	System.out.println("cab book" +" "+source + " " +des);
+		return des;
+	}
+	
+	}
+}
+*/
+
+public class DemoLambda {
+
+	public static void main(String[] args) 
+	{
+		CabRide CR= (String source, String des)->
+		{
+			System.out.println("cab book" +" "+source + " " +des);
+			return des;
+			};
+		
+		CR.Ride("Hyd", "Chennai");
+	}
+
+}

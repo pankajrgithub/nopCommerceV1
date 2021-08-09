@@ -1,0 +1,21 @@
+package Demo;
+
+
+interface Cabbook 
+{
+	public void String(String source,String Destination);
+	
+}
+
+
+
+
+public class DemoLambda {
+
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+}

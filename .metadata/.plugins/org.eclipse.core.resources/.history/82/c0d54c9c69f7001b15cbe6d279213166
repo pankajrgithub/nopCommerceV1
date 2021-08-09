@@ -1,0 +1,40 @@
+package Demo;
+
+@FunctionalInterface  //explicit annotation allow only on abstract method
+interface CabRide
+{
+	public String Ride(String source,String des);
+	
+}
+
+/*class Ola implements CabRide
+{
+	public String Ride(String source, String des)
+	{
+		System.out.println("cab book" +" "+source + " " +des);
+		return "Price:40";
+	
+	(String source, String des)->
+	{
+	System.out.println("cab book" +" "+source + " " +des);
+		return des;
+	}
+	
+	}
+}
+*/
+
+public class DemoLambda {
+
+	public static void main(String[] args) 
+	{
+		CabRide CR= (String source, String des)->
+		{
+			System.out.println("cab book" +" "+source +"To" +" " +des);
+			return "Price:40";
+			};
+		
+		System.out.println(CR.Ride("Hyd", "Chennai"));
+	}
+
+}
