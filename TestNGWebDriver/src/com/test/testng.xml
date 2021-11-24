@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<!--suite-->
+<suite name="Google Search">
+
+<!-- test -->
+<test name="google searchtest">
+
+<!-- classes -->
+<classes>
+<class name="com.test.DependAndGroupTest"/>
+<class name="com.test.GoogleLogoTest"/>
+<class name="com.test.TestNGAnotation"/>
+
+</classes>
+</test>
+</suite>

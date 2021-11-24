@@ -1,0 +1,103 @@
+TestNG is an open source,free
+TestNG java unit testing frame work
+
+It is available on Jar format, to use TestNG on project just add to TestNG jar file
+
+TestNG is unit testing framework -used by java developer to execute unit testing 
+TestNG also called- TDD (Test Driven Development) -used in Agile methodology kind of pre-requsite 
+
+To download TestNG Eclipse plugin -->Go to Help-->Eclipse MarketPlace-->
+Search TestNG and install latest plugin.
+
+TestNG has different annotation to manage Test -
+--Every Annotation should have a method to define that Annotation .
+1. @BeforeSuit
+2. @BeforeTest
+3. @BeforeClass
+4. @BeforeMethod
+5. @Test
+6. @AfterMethod
+7. @AfterClass
+8. @AfterTest
+9. @DataProvider //most important annotation to provide data in loop
+
+TestNG used for generate report in HTML format
+
+TestNG used for manage Test--Sequence ,Dependency 
+
+TestNG doesn't required main() method to execute test 
+-----------------------------------------------------------
+Features of TestNG framework-
+1.priority=number  ---to set Test Case priority to execute test as priority 
+2.Groups="name" ----group test case by using specific module name
+3.depenendOnMethod="methodName" ---- test case dependent on particular method
+4.expectedException="name of exception" ----it will ignore/handle exception at runtime for specific test case
+5.invocationTimeout=2000(ms) -------- it will wait 2 second for than move to next case
+6.Enabled=false   ------initialization this parameter at Test level will ignore to run this test.
+
+Assertion - to validate test case with Actual and expected result
+
+Assert.assertEqual(actual,expected, "message to show if fail")
+
+testng.xml -file is used for to bind all the test cases together and execute them using single xml file
+---------------------------------------------------
+/Sequence to execute test-- pair will be created like this for every single Test
+Chronological order
+	@BeforeMethod
+	@Test
+	@AfterMethod
+	
+	
+	----------------------------------------------------------------
+	What is Assertion and their types?
+	---Assertion means validation---- using Assert class we can achieve assertion validation in Selenium 
+	Two types of Assertion -
+	1.Hard Assertion
+	2.Soft Assertion
+	
+	1.Hard Assertion--------- it will skip rest of Test execution if any assertion will get failed
+	Assert.assertEquals(Expected,Actual,Message to show on fail)
+	Assert.assertTrue(condition)  ----it will check return condition
+	Assert.assertFalse(condition)  --------it is just opposite of assertTrue
+	
+	2.Soft Assertion
+	It will continue execution if any assertion get failed
+	to achieve soft assertion in selenium we have to create instance for SoftAssert class.
+	
+	SoftAssert soft=new SoftAssert() //if this instance created at class level and every test assertion using same softAssert object
+	if in case any test will get failed remaining all test will get failed.
+	To overcome this problem we have to create separate SoftAssert instance for every Test.
+	
+	Eg- SoftAssert soft=new SoftAssert();
+	soft.assertEquals(Expected,Actual);
+	soft.assertTrue(true);
+	soft.assertFalse(false);
+	
+	soft.assertAll(); ----this assert is required if any assertion will get failed it will continue with next Test 
+	
+	----------------------------------------------------------------------
+	TestNG always execute Test using XML file without xml file TestNG test can't run
+	if we are running a TestNG class it will by default create .XML file at home directory of project.
+	We can create our own .XML file to manage TestNG test 
+	
+	---------------------------------------------------
+	Listener --> to used Listener in selenium we have to extends below class
+	TestListenerAdapter class - This class have feature to give deffination to @Test annotation on start, success and failure ,skipped
+	This class having method like-
+	
+	onTestStart(ITestResult tr)
+	onTestSuccess(ITestResult tr)
+	onTestFailure(ITestResult tr)
+	onTestSkipped(ITestResult tr)
+	
+	We can't run Listener class along we have to add Listener class at xml file with tag
+	
+	<listeners>
+	<listener class-name=""/>
+	
+	</listeners>
+	
+	------------------------------------------
+	Extent Report-
+	
+	setUp we have class 
